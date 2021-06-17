@@ -5,7 +5,7 @@
       <form class="pure-form" @submit.prevent="upload">
         <legend>Make a Hang</legend>
         <fieldset>
-          <input v-model="title" placeholder="Title">
+          <textarea v-model="title" placeholder="Title"></textarea>
         </fieldset>
         <fieldset>
           <textarea v-model="description" placeholder="Description:"></textarea>
@@ -72,17 +72,20 @@ export default {
     async upload() {
       try {
         const formData = new FormData();
-        formData.append('photo', this.file, this.file.name);
+        formData.append('hang', this.file, this.file.name);
         formData.append('title', this.title);
         formData.append('description', this.description);
         formData.append('city', this.city);
         formData.append('activity', this.activity);
         formData.append('bring', this.bring);
-        await axios.post("/api/photos", formData);
+        await axios.post("/api/hangs", formData);
         this.file = null;
         this.url = "";
         this.title = "";
         this.description = "";
+        this.city = "";
+        this.activity = "";
+        this.bring = "";
         this.$emit('uploadFinished');
       } catch (error) {
         this.error = "Error: " + error.response.data.message;

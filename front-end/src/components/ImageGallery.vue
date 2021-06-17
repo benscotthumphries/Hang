@@ -1,29 +1,32 @@
 <template>
 <div>
   <section class="image-gallery">
-    <div class="image" v-for="photo in photos" v-bind:key="photo._id">
-      <img class='photo' :src="photo.path" />
-      <div class="photoInfo">
-        <div class="photoTitle">
-          <p class="photoTitle">{{photo.title}}</p>
+    <div class="image" v-for="hang in hangs" v-bind:key="hang._id">
+      <img class='hang' :src="hang.path" />
+      <div class="hangInfo">
+        <div class="hangTitle">
+          <p class="hangTitle">{{hang.title}}</p>
         </div>
-        <div class="photoDescription">
-          <p class="photoDescription">Description: <br>{{photo.description}}</p>
+        <div class="hangDescription">
+          <p class="hangDescription">Description: <br>{{hang.description}}</p>
         </div>
-        <div class="photoCity">
-          <p class="photoCity">Location: <br>{{photo.city}}</p>
+        <div class="hangCity">
+          <p class="hangCity">Location: <br>{{hang.city}}</p>
         </div>
-        <div class="photoBring">
-          <p class="photoBring">What to bring? <br>{{photo.bring}}</p>
+        <div class="hangBring">
+          <p class="hangBring">What to bring? <br>{{hang.bring}}</p>
         </div>
-        <div class="photoActivity">
-          <p class="photoActivity">Category: <br>{{photo.activity}}</p>
+        <div class="hangActivity">
+          <p class="hangActivity">Category: <br>{{hang.activity}}</p>
         </div>
-        <div class="photoName">
-          <p class="photoName">Host: <br>{{photo.user.firstName}} {{photo.user.lastName}}</p>
+        <div class="hangName">
+          <p class="hangName">Host: <br>{{hang.user.firstName}} {{hang.user.lastName}}</p>
         </div>
-        <div class="photoDate">
-          <p class="photoDate">Posted: {{formatDate(photo.created)}}</p>
+        <div class="hangDate">
+          <p class="hangDate">Posted: {{formatDate(hang.created)}}</p>
+        </div>
+        <div>
+          <button v-if="user" @click="deleteHang(hang)">Delete Hang</button>
         </div>
       </div>
     </div>
@@ -33,18 +36,49 @@
 
 <script>
 import moment from 'moment';
+import axios from 'axios';
 
 export default {
   name: 'ImageGallery',
   props: {
-    photos: Array
+    hangs: Array,
   },
+  async created() {
+      try {
+        let response = await axios.get('/api/users');
+        this.$root.$data.user = response.data.user;
+      } catch (error) {
+        this.$root.$data.user = null;
+      }
+    },
   methods: {
     formatDate(date) {
       if (moment(date).diff(Date.now(), 'days') < 15)
         return moment(date).fromNow();
       else
         return moment(date).format('d MMMM YYYY');
+    },
+    async deleteHang(hang) {
+      try {
+        await axios.delete("/api/hangs/" + hang._id);
+        this.getHangs();
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getHangs() {
+      try {
+        this.response = await axios.get("/api/hangs");
+        this.hangs = this.response.data;
+      } catch (error) {
+        this.error = error.response.data.message;
+      }
+    },
+  },
+  computed: {
+    user() {
+      return this.$root.$data.user;
     }
   }
 }
@@ -57,12 +91,13 @@ export default {
   padding: 10px;
   width:100%;
 }
-.photo{
+
+.hang{
   display: flex;
   width:15%;
   align-content: flex-start;
 }
-.photoInfo{
+.hangInfo{
   display: flex;
   width:100%;
   padding-left: 10px;
@@ -70,70 +105,70 @@ export default {
   flex-wrap: wrap;
   text-align: left;
 }
-.photoTitle{
+.hangTitle{
   width:20%;
-  background-color:darkcyan;
+  background-color:rgb(165, 177, 177);
 }
-.photoDate{
+.hangDate{
   display: flex;
   width:20%;
-  background-color:palevioletred;
+  background-color:rgb(165, 177, 177);
 }
-.photoCity{
+.hangCity{
   display: flex;
   width:20%;
-  background-color: rgb(160, 159, 189);
+  background-color: rgb(165, 177, 177);
 }
-.photoBring{
+.hangBring{
   display: flex;
   width:20%;
-  background-color:gray;
+  background-color:rgb(165, 177, 177);
 }
-.photoActivity{
+.hangActivity{
   display: flex;
   width:20%;
-  background-color:maroon;
+  background-color:rgb(165, 177, 177);
 }
-.photoName{
+.hangName{
   display: flex;
   width:20%;
-  background-color:olive;
+  background-color:rgb(165, 177, 177);
 }
-.photoDescription{
+.hangDescription{
   display: flex;
   width:80%;
-  background-color: coral;
+  background-color: rgb(165, 177, 177);
 }
 @media only screen and (max-width: 400px) {
 .image{
   flex-direction: column;
 }
-.photoInfo{
+.hangInfo{
   padding-left: 0px;
   padding-right: 20px;
 }
-.photo{
+.hang{
   width:50%;
 }
-  .photoTitle{
+  .hangTitle{
   width:auto;
 }
-.photoDate{
+.hangDate{
    width:auto;
 }
-.photoCity{
+.hangCity{
    width:auto;
 }
-.photoBring{
+.hangBring{
    width:auto;
 }
-.photoActivity{
+.hangActivity{
    width:auto;
 }
-.photoName{
+.hangName{
    width:auto;
 }
-.photoDescription{
+.hangDescription{
    width:auto;
 }
 }

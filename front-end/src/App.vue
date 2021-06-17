@@ -7,15 +7,15 @@
             <router-link class="pure-menu-link" to="/">Discover</router-link>
           </li>
           <li class="pure-menu-item">
-            <router-link class="pure-menu-link" to="/myhangs">My Hangs</router-link>
-          </li>
-          <li class="pure-menu-item">
-            <router-link class="pure-menu-link" to="/about">Learn More</router-link> 
+            <router-link class="pure-menu-link" to="/account">My Hangs</router-link>
           </li>
         </ul>
       </div>
     </div>
     <router-view/>
+    <div class='footer'>
+      <p>I spent 25 hours | <a href="https://github.com/benscotthumphries/Hang">GitHub</a></p>
+    </div>
   </div>
 </template>
 
@@ -44,6 +44,8 @@
   color: rgb(105, 152, 173);
 }
 
-
+.footer{
+  padding: 40px;
+}
 
 </style>

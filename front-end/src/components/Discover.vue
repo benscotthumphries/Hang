@@ -1,27 +1,27 @@
 <template>
 <div class="discover">
-  <image-gallery :photos="photos" />
+  <discover-gallery :hangs="hangs" />
   <p v-if="error">{{error}}</p>
 </div>
 </template>
 
 <script>
 import axios from 'axios';
-import ImageGallery from '@/components/ImageGallery.vue';
+import DiscoverGallery from '@/components/DiscoverGallery.vue';
 export default {
   name: 'Discover',
   components: {
-    ImageGallery,
+    DiscoverGallery,
   },
   data() {
     return {
-      photos: [],
+      hangs: [],
       error: '',
       searchText: ''
     }
   },
   async created() {
-    this.getPhotos();
+    this.gethangs();
     try {
         let response = await axios.get('/api/users');
         this.$root.$data.user = response.data.user;
@@ -30,10 +30,10 @@ export default {
       }
   },
   methods: {
-    async getPhotos() {
+    async gethangs() {
       try {
-        let response = await axios.get("/api/photos/all");
-        this.photos = response.data;
+        let response = await axios.get("/api/hangs/all");
+        this.hangs = response.data;
       } catch (error) {
         this.error = error.response.data.message;
       }
