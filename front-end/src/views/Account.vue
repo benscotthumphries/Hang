@@ -7,11 +7,7 @@
       <uploader :show="show" @close="close" @uploadFinished="uploadFinished" />
     </div>
     <image-gallery :hangs="hangs" />
-  </div>
-  <div v-else>
-    <p>Please Sign In</p>
-  </div>
-  <div class='edit'>
+    <div class='edit'>
     <div class="heading">
         <h2>Edit a Hang</h2>
     </div>
@@ -56,6 +52,11 @@
       </div>
     </div>
   </div>
+  </div>
+  <div v-else>
+    <p>Please Sign In</p>
+  </div>
+  
 </div>
 </template>
 
